@@ -4,6 +4,7 @@
     use Illuminate\Support\Facades\Route;
     use Illuminate\Support\Facades\Auth;
     use App\Http\Middleware\Authenticate;
+    use App\Models\User;
 
     Route::post('/login', function (Request $request) {
         $credentials = $request->only('email', 'password');
