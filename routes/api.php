@@ -28,6 +28,17 @@
         ], 200);
     });
 
+    Route::get('/umum', function (Request $request) {
+        $data = User::orderBy('name', 'asc')->get();
+        $dataRespon = [
+            'status' => true,
+            'message' => 'Pengambilan data dilakukan tanpa token',
+            'data' => $data,
+        ];
+        return response()->json($dataRespon);
+    });
+
+
     //daftarkan midleware auth.token-jwt
     Route::middlewareGroup('auth.token-jwt', [
         Authenticate::class,
