@@ -50,7 +50,11 @@
     Route::middleware('auth.token-jwt')->group(function () {
 
         Route::post('/logout', function (Request $request) {
-            auth()->guard('api')->logout(); // Menghapus token yang sedang aktif
+            $token = auth()->guard('api')->getToken();
+            auth()->guard('api')->logout();
+
+            // Masukkan token ke dalam blacklist
+            JWTAuth::invalidate($token);
 
             return response()->json([
                 'status' => true,
