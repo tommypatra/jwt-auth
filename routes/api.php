@@ -29,15 +29,6 @@
         ], 200);
     });
 
-    Route::post('/logout', function (Request $request) {
-        auth()->guard('api')->logout(); // Menghapus token yang sedang aktif
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Logout berhasil',
-            'data' => null,
-        ], 200);
-    });
 
     Route::get('/umum', function (Request $request) {
         $data = User::orderBy('name', 'asc')->get();
@@ -57,6 +48,17 @@
 
     //validasi dulu ke auth.token-jwt
     Route::middleware('auth.token-jwt')->group(function () {
+
+        Route::post('/logout', function (Request $request) {
+            auth()->guard('api')->logout(); // Menghapus token yang sedang aktif
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Logout berhasil',
+                'data' => null,
+            ], 200);
+        });
+
 
         Route::get('/cek-token', function () {
             $user = auth()->user();
