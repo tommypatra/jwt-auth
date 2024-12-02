@@ -54,7 +54,8 @@
             if ($token) {
                 JWTAuth::invalidate($token);
                 // Masukkan token ke dalam blacklist redis
-                Cache::put('jwt_blacklist_' . $token, true, now()->addMinutes(env('JWT_TTL'))); // Gunakan TTL yang sama dengan JWT
+                $ttl = (int) env('JWT_TTL', 120);
+                Cache::put('jwt_blacklist_' . $token, true, now()->addMinutes(ttl)); // Gunakan TTL yang sama dengan JWT
             }
             auth()->guard('api')->logout();
 
