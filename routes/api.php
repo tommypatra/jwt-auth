@@ -4,6 +4,7 @@
     use Illuminate\Support\Facades\Route;
     use Illuminate\Support\Facades\Auth;
     use App\Http\Middleware\Authenticate;
+    use Illuminate\Support\Facades\Cache;
     use App\Models\User;
 
     Route::post('/login', function (Request $request) {
@@ -52,10 +53,11 @@
         Route::post('/logout', function (Request $request) {
             $token = auth()->guard('api')->getToken();
             if ($token) {
-                JWTAuth::invalidate($token);
                 // Masukkan token ke dalam blacklist redis
                 $ttl = (int) env('JWT_TTL', 120);
                 Cache::put('jwt_blacklist_' . $token, true, now()->addMinutes(ttl)); // Gunakan TTL yang sama dengan JWT
+
+                JWTAuth::invalidate($token);
             }
             auth()->guard('api')->logout();
 
