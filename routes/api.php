@@ -51,10 +51,12 @@
 
         Route::post('/logout', function (Request $request) {
             $token = auth()->guard('api')->getToken();
+            if ($token) {
+                JWTAuth::invalidate($token);
+                // Masukkan token ke dalam blacklist redis
+                Cache::put('jwt_blacklist_' . $token, true, now()->addMinutes(env('JWT_TTL'))); // Gunakan TTL yang sama dengan JWT
+            }
             auth()->guard('api')->logout();
-
-            // Masukkan token ke dalam blacklist
-            JWTAuth::invalidate($token);
 
             return response()->json([
                 'status' => true,

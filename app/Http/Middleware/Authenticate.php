@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 use Symfony\Component\HttpFoundation\Response;
 
 class Authenticate
@@ -17,6 +18,12 @@ class Authenticate
         if (!$token) {
             return response()->json(['status' => false, 'message' => 'Unauthorized', 'data' => null], 401);
         }
+
+        //cek di redis apakah jwt sudah di blacklist
+        if (Cache::get('jwt_blacklist_' . $token)) {
+            return response()->json(['status' => false, 'message' => 'Token sudah tidak valid', 'data' => null], 401);
+        }
+
         try {
             $user = JWTAuth::parseToken()->authenticate();
         } catch (JWTException $e) {
