@@ -6,7 +6,7 @@
     use App\Http\Middleware\Authenticate;
     use App\Models\User;
 
-    Route::post('/login', function (Request $request) {
+    Route::post('/cek-akun', function (Request $request) {
         $credentials = $request->only('email', 'password');
 
         if (!$token = auth()->guard('api')->attempt($credentials)) {
@@ -29,7 +29,7 @@
         ], 200);
     });
 
-    Route::get('/umum', function (Request $request) {
+    Route::get('/umum', function () {
         $data = User::orderBy('name', 'asc')->get();
         $dataRespon = [
             'status' => true,
@@ -57,7 +57,7 @@
             ], 200);
         });
 
-        Route::get('/akun', function (Request $request) {
+        Route::get('/akun', function () {
             $data = User::orderBy('name', 'asc')->get();
             $dataRespon = [
                 'status' => true,
@@ -79,7 +79,6 @@
             ], 200);
         });
     });
-
 
     Route::fallback(function () {
         return response()->json([
