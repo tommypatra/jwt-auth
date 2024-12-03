@@ -39,6 +39,15 @@
         return response()->json($dataRespon);
     });
 
+    Route::post('/cek-token', function (Request $request) {
+        $token = $request->bearerToken();
+
+        if (!$token || !JWTAuth::setToken($token)->check()) {
+            return response()->json(['message' => 'Token invalid'], 401);
+        }
+
+        return response()->json(['message' => 'Token valid'], 200);
+    });
 
     //daftarkan midleware auth.token-jwt
     Route::middlewareGroup('auth.token-jwt', [
@@ -48,12 +57,12 @@
     //validasi dulu ke auth.token-jwt
     Route::middleware('auth.token-jwt')->group(function () {
 
-        Route::get('/cek-token', function () {
-            return response()->json([
-                'status' => true,
-                'message' => 'Token valid',
-            ], 200);
-        });
+        // Route::get('/cek-token', function () {
+        //     return response()->json([
+        //         'status' => true,
+        //         'message' => 'Token valid',
+        //     ], 200);
+        // });
 
         Route::get('/akun', function () {
             $data = User::orderBy('name', 'asc')->get();
