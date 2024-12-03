@@ -49,11 +49,9 @@
     Route::middleware('auth.token-jwt')->group(function () {
 
         Route::get('/cek-token', function () {
-            $user = auth()->user();
             return response()->json([
                 'status' => true,
                 'message' => 'Token valid',
-                'data' => $user,
             ], 200);
         });
 
