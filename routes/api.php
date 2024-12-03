@@ -80,10 +80,10 @@
         });
     });
 
-    // Route::fallback(function () {
-    //     return response()->json([
-    //         'status' => false,
-    //         'message' => 'Route not found',
-    //         'data' => null,
-    //     ], 404);
-    // });
+    Route::fallback(function () {
+        return response()->json([
+            'status' => false,
+            'message' => 'Route not found',
+            'data' => null,
+        ], 404);
+    });
