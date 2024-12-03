@@ -6,7 +6,7 @@
     use App\Http\Middleware\Authenticate;
     use App\Models\User;
 
-    Route::post('/cek-akun', function (Request $request) {
+    Route::post('/masuk', function (Request $request) {
         $credentials = $request->only('email', 'password');
 
         if (!$token = auth()->guard('api')->attempt($credentials)) {
